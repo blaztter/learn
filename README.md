@@ -69,23 +69,39 @@ Jumlah data: 918 sampel, 12 kolom.
 
    Matriks korelasi menunjukkan bahwa Oldpeak (0.4) dan MaxHR (-0.4) memiliki korelasi paling kuat dengan penyakit jantung, menjadikannya prediktor utama, diikuti oleh usia (0.28) dan gula darah puasa (0.27) dengan korelasi positif sedang, serta kolesterol (-0.23) yang menunjukkan korelasi negatif lemah yang tidak biasa dan perlu investigasi lebih lanjut. Fitur seperti tekanan darah istirahat (0.11) memiliki pengaruh minimal, sehingga Oldpeak dan MaxHR dapat diprioritaskan untuk analisis atau model prediksi penyakit jantung.
 
+
 ## Data Preparation
 
+Data preparation adalah proses penting dalam pengembangan model AI. Proses ini memastikan data yang digunakan berkualitas tinggi, relevan, dan siap untuk melatih model machine learning. Tanpa data preparation yang baik, model dapat menghasilkan performa buruk, bias, atau bahkan gagal mengenali pola yang diinginkan.
+
 ### Langkah-langkah:
-1. **Encoding**: One-hot encoding pada fitur lain.
-2. **Train-test split**: 80% data latih, 20% data uji.
-3. **Scaling**: StandardScaler untuk `RestingBP`, `Cholesterol`, `MaxHR`, `Oldpeak`.
+1. **Pemisahan Fitur dan Target:**   
+   - Target: HeartDisease
+   - Fitur: Seluruh kolom selain target
+2. **Encoding**: One-hot encoding pada fitur lain.
+3. **Train-test split**: 80% data latih, 20% data uji.
+4. **Scaling**: StandardScaler untuk `RestingBP`, `Cholesterol`, `MaxHR`, `Oldpeak`.
 
 ### Alasan:
 1. Algoritma Random Forest tidak sensitif terhadap skala, tapi scaling membantu stabilitas.
 2. Encoding diperlukan agar fitur kategorikal dapat diproses oleh model.
+3. Train-test split sebelum scaling untuk mencegah data leakage.
 
 ## Modeling
-## Random Forest Classifier
+### Random Forest Classifier
+Random Forest membentuk beberapa pohon keputusan menggunakan teknik bootstrapping, lalu melakukan majority voting untuk menentukan prediksi akhir.
 ### Mekanisme:
 1. Membangun banyak pohon keputusan secara acak (bootstrap samples)
 2. Setiap pohon memilih fitur secara acak untuk split
 3. Prediksi akhir ditentukan oleh voting majority (untuk klasifikasi)
+
+### Parameter:
+- class_weight='balanced': Menyeimbangkan kelas target jika terjadi ketidakseimbangan (imbalanced class).
+- random_state=42: Agar eksperimen dapat direproduksi dengan hasil yang konsisten.
+- Parameter lainnya seperti n_estimators, max_dep, criterion menggunakan nilai default:
+  - n_estimators=100: Jumlah pohon default.
+  - max_depth=None: Setiap pohon dibiarkan tumbuh hingga sempurna.
+  - criterion='gini': Pengukuran kualitas split default.
 
 ### Kelebihan:
 1. Menangani non-linearitas dan interaksi fitur
@@ -121,6 +137,16 @@ F1-Score: 0.8698
 **Weighted Avg**: Precision = 0.87, Recall = 0.87, F1-Score = 0.87
 
 
-Model berhasil memberikan prediksi yang seimbang antara mengidentifikasi pasien yang benar-benar sakit dan menghindari false positives.
+## Analisis Dampak terhadap Business Understanding:
+Model memberikan prediksi yang seimbang antara mengenali pasien yang benar-benar berisiko dan meminimalisasi false positives, yang sangat penting dalam konteks klinis. Ini menjawab Problem Statement #1 dan #3, yaitu:
+
+- Membangun model prediktif akurat
+- Memastikan generalisasi model yang baik
+
+Dengan akurasi 86.9%, model ini melampaui target goal ≥85%.
+Selain itu, feature importance dari model menunjukkan bahwa Oldpeak, MaxHR, dan Age adalah faktor risiko dominan, menjawab Problem Statement #2.
+
+### Kesimpulan
+Model Random Forest yang dibangun berhasil mencapai performa yang baik dengan akurasi >86%, memberikan insight terhadap fitur yang berkontribusi besar, dan layak diimplementasikan dalam sistem prediksi risiko penyakit jantung sebagai bagian dari sistem pendukung keputusan medis.
 
 
