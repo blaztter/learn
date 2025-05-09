@@ -75,17 +75,18 @@ Jumlah data: 918 sampel, 12 kolom.
 Data preparation adalah proses penting dalam pengembangan model AI. Proses ini memastikan data yang digunakan berkualitas tinggi, relevan, dan siap untuk melatih model machine learning. Tanpa data preparation yang baik, model dapat menghasilkan performa buruk, bias, atau bahkan gagal mengenali pola yang diinginkan.
 
 ### Langkah-langkah:
-1. **Pemisahan Fitur dan Target:**   
+1. **Encoding**: One-hot encoding pada fitur lain.
+2. **Pemisahan Fitur dan Target:**   
    - Target: HeartDisease
    - Fitur: Seluruh kolom selain target
-2. **Encoding**: One-hot encoding pada fitur lain.
 3. **Train-test split**: 80% data latih, 20% data uji.
 4. **Scaling**: StandardScaler untuk `RestingBP`, `Cholesterol`, `MaxHR`, `Oldpeak`.
 
 ### Alasan:
 1. Algoritma Random Forest tidak sensitif terhadap skala, tapi scaling membantu stabilitas.
 2. Encoding diperlukan agar fitur kategorikal dapat diproses oleh model.
-3. Train-test split sebelum scaling untuk mencegah data leakage.
+3. Pemisahan Fitur dan target ini sangat penting agar model dapat mempelajari hubungan antara fitur dan target dengan jelas.
+4. Train-test split sebelum scaling untuk mencegah data leakage.
 
 ## Modeling
 ### Random Forest Classifier
